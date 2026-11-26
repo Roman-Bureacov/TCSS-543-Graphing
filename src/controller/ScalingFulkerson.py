@@ -24,6 +24,14 @@ class ScalingFulkerson(Graph):
         # Both nodes reference the same Edge object
         self.adj[u].append(edge)
         self.adj[v].append(edge)
+    def add_node(self, node):
+        pass
+
+    def remove_node(self, node):
+        pass
+
+    def __str__(self):
+        return "ScalingFulkerson"
 
     def adjacent_to(self, u: Node) -> list[Node]:
         raise NotImplementedError

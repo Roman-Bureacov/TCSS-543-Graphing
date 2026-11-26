@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-from abc import abstractmethod, ABC
-
-class Node:
-    """Basic representation of a node in a graph"""
-    def __init__(self, name):
-        self.name = name
-
-
-class Edge:
-    def __init__(self, u: Node, v: Node, capacity: int):
-        self.u = u
-        self.v = v
-        self.capacity = capacity
-        self.flow = 0
-=======
 """Code for the generic graph data structure.
 
 The purpose of this code is to create working code for graphs.
@@ -25,7 +9,23 @@ adjacency matrix.
 
 from abc import abstractmethod, ABC
 from typing import override
->>>>>>> origin/main
+
+class Node:
+    """Basic representation of a node in a graph"""
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+class Edge:
+    def __init__(self, u: Node, v: Node, capacity: int):
+        self.u = u
+        self.v = v
+        self.capacity = capacity
+        self.flow = 0
+
+from abc import abstractmethod, ABC
+from typing import override
 
 class Graph(ABC):
     """An abstract class for a network flow graph
@@ -33,8 +33,6 @@ class Graph(ABC):
     Network flow graphs are guaranteed to have no cycles.
     They have one source node s, and one sink node t.
     """
-<<<<<<< HEAD
-=======
 
     source: Node
     sink: Node
@@ -48,7 +46,6 @@ class Graph(ABC):
         """
         self.source = source
         self.sink = sink
->>>>>>> origin/main
     
     @abstractmethod
     def adjacent_to(self, u: Node) -> list[Node]:
@@ -81,8 +78,6 @@ class Graph(ABC):
         raise NotImplementedError
 
     @abstractmethod
-<<<<<<< HEAD
-=======
     def add_node(self, u: Node) -> None:
         """Add a node to the graph
 
@@ -104,7 +99,6 @@ class Graph(ABC):
         raise NotImplementedError
 
     @abstractmethod
->>>>>>> origin/main
     def add_edge(self, u: Node, v: Node, weight: int) -> None:
         """Add an edge to the graph
 
@@ -112,12 +106,9 @@ class Graph(ABC):
             u: a node
             v: a node
             weight: the edge weight
-<<<<<<< HEAD
-=======
 
         Throws:
             ValueError: if the nodes don't exist in the graph
->>>>>>> origin/main
         """
         raise NotImplementedError
 
@@ -128,35 +119,23 @@ class Graph(ABC):
         Args:
             u: a node
             v: a node
-<<<<<<< HEAD
-=======
 
         Throws:
             ValueError: if the edge doesn't exist in the graph
->>>>>>> origin/main
         """
         raise NotImplementedError
 
     @abstractmethod
     def nodes(self) -> list[Node]:
-<<<<<<< HEAD
-=======
         """Returns the list of nodes in this graph
 
         Returns:
             a list of nodes
         """
->>>>>>> origin/main
         raise NotImplementedError
 
     @abstractmethod
     def edges(self) -> list[tuple[Node, Node]]:
-<<<<<<< HEAD
-        raise NotImplementedError
-
-    @abstractmethod
-    def to_string(self) -> str:
-=======
         """Returns the list of edges in this graph
 
         Returns:
@@ -166,7 +145,6 @@ class Graph(ABC):
 
     @abstractmethod
     def __str__(self) -> str:
->>>>>>> origin/main
         """Return a string representation of the graph
 
         Returns:
@@ -179,21 +157,6 @@ class ResidualGraph(Graph):
 
     def __init__(self, graph):
         self.graph = graph
-<<<<<<< HEAD
-        self.forwardEdges = {}
-        self.backwardEdges = {}
-
-        self.add_residual_edges()
-        
-    def add_residual_edges(self):
-        for e in self.graph.edges():
-            u, v = e
-
-            self.forwardEdges[(u, v)] = 0
-            self.backwardEdges[(v, u)] = 0
-            
-    def add_flow(self, u, v, flow) -> None:
-=======
         self.residual_edges = {}
 
         self._add_residual_edges()
@@ -216,26 +179,14 @@ class ResidualGraph(Graph):
             flow: the flow to add
 
         """
->>>>>>> origin/main
         # TODO: bound?
         if flow > self.graph.weight(u, v): 
             raise ValueError("flow over capacity")
         
-<<<<<<< HEAD
-        self.forwardEdges[(u, v)] += flow
-        self.backwardEdges[(v, u)] -= flow
-
-=======
         self.residual_edges[(u, v)] += flow
         self.residual_edges[(v, u)] -= flow
 
-class Node:
-    """Basic representation of a node in a graph"""
-    def __init__(self, name):
-        self.name = name
 
-    def __str__(self):
-        return self.name
 
 class GraphAdjacencyList(Graph):
     """A graph represented by an adjacency list
@@ -332,4 +283,3 @@ class GraphAdjacencyMatrix(Graph):
     # TODO: implement at some point?
     def __init__(self):
         raise NotImplementedError
->>>>>>> origin/main
