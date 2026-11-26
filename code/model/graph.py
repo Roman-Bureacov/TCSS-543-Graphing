@@ -1,5 +1,18 @@
 from abc import abstractmethod, ABC
 
+class Node:
+    """Basic representation of a node in a graph"""
+    def __init__(self, name):
+        self.name = name
+
+
+class Edge:
+    def __init__(self, u: Node, v: Node, capacity: int):
+        self.u = u
+        self.v = v
+        self.capacity = capacity
+        self.flow = 0
+
 class Graph(ABC):
     """An abstract class for a network flow graph
 
@@ -100,7 +113,3 @@ class ResidualGraph(Graph):
         self.forwardEdges[(u, v)] += flow
         self.backwardEdges[(v, u)] -= flow
 
-class Node:
-    """Basic representation of a node in a graph"""
-    def __init__(self, name):
-        self.name = name
