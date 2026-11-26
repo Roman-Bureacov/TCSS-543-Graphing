@@ -60,10 +60,20 @@ class Graph(ABC):
 
     @abstractmethod
     def nodes(self) -> list[Node]:
+        """Returns the list of nodes in this graph
+
+        Returns:
+            a list of nodes
+        """
         raise NotImplementedError
 
     @abstractmethod
     def edges(self) -> list[tuple[Node, Node]]:
+        """Returns the list of edges in this graph
+
+        Returns:
+            a list of edges
+        """
         raise NotImplementedError
 
     @abstractmethod
@@ -83,16 +93,26 @@ class ResidualGraph(Graph):
         self.forwardEdges = {}
         self.backwardEdges = {}
 
-        self.add_residual_edges()
+        self._add_residual_edges()
         
-    def add_residual_edges(self):
+    def _add_residual_edges(self) -> None:
+        """Adds residual edges to the graph
+        """
         for e in self.graph.edges():
             u, v = e
 
             self.forwardEdges[(u, v)] = 0
             self.backwardEdges[(v, u)] = 0
             
-    def add_flow(self, u, v, flow) -> None:
+    def add_flow(self, u: Node, v: Node, flow: int) -> None:
+        """Add flow to an edge in the graph
+
+        Args:
+            u: a node
+            v: a node
+            flow: the flow to add
+
+        """
         # TODO: bound?
         if flow > self.graph.weight(u, v): 
             raise ValueError("flow over capacity")
