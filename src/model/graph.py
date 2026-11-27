@@ -5,6 +5,8 @@ Contained is an abstract class for graphs, alongside a concrete
 implementation being that of an adjacency list and an
 adjacency matrix.
 
+notation is: edges are (u, v) where an edge goes from u to v
+
 """
 
 from abc import abstractmethod, ABC
@@ -113,7 +115,7 @@ class Graph(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def remove_edge(self, u: Node, v: Node):
+    def remove_edge(self, u: Node, v: Node) -> None:
         """Remove an edge from the graph
 
         Args:
@@ -195,10 +197,11 @@ class GraphAdjacencyList(Graph):
     def __init__(self, source: Node, sink: Node):
         super().__init__(source, sink)
         self.nodes: set[Node] = set() # nodes are held in a set
-        self.nodes.add(source)
-        self.nodes.add(sink)
         self.edges: dict[Node, set[Node]] = {} # nodes mapped to other nodes they point to
         self.weights: dict[tuple[Node, Node], int] = {} # a lookup dictionary for edges
+
+        self.nodes.add(source)
+        self.nodes.add(sink)
 
     @override
     def adjacent_to(self, u: Node) -> list[Node]:
@@ -280,6 +283,95 @@ Nodes: {n}
         return s
 
 class GraphAdjacencyMatrix(Graph):
-    # TODO: implement at some point?
-    def __init__(self):
-        raise NotImplementedError
+    def __init__(self, source: Node, sink: Node, nodes: list[Node]):
+        """initializes a graph represented by an adjacency matrix
+
+        This graph does not permit a change in nodes, but allows for
+        creation and deletion of edges.
+
+        Args:
+            source: the flow source node
+            sink: the flow sink node
+            nodes: the collection of all nodes in the graph
+
+        """
+        super().__init__(source, sink)
+        # initialize the matrix to None (no edge)
+        self.matrix: list[list[int | None]] = [
+            [None for _ in range(len(nodes))]
+            for _ in range(len(nodes))
+        ] # mapping is: rows are u and columns are v
+
+        # map nodes to an index
+        self.indices: dict[Node, int] = {}
+        for i, n in enumerate(nodes): self.indices[n] = i
+        self.nodes = {n for n in nodes} # dupe the list into a set
+
+    @override
+    def adjacent_to(self, u: Node) -> list[Node]:
+        pass
+
+    @override
+    def weight(self, u: Node, v: Node) -> int:
+        r = self.matrix[self.indices[u]][self.indices[v]]
+        if r is not None: return r
+        else: raise ValueError("unknown edge u and v")
+
+    @override
+    def add_node(self, u: Node) -> None:
+        raise NotImplementedError()
+
+    @override
+    def remove_node(self, u: Node) -> None:
+        raise NotImplementedError()
+
+    @override
+    def add_edge(self, u: Node, v: Node, weight: int) -> None:
+        self.matrix[self.indices[u]][self.indices[v]] = weight
+
+    @override
+    def remove_edge(self, u: Node, v: Node) -> None:
+        self.matrix[self.indices[u]][self.indices[v]] = None
+
+    @override
+    def nodes(self) -> list[Node]:
+        return list(self.nodes)
+
+    @override
+    def edges(self) -> list[tuple[Node, Node]]:
+        l = []
+        for u in self.indices.keys():
+            for v in self.indices.keys():
+                # index into the matrix, by getting the index of the nodes
+                if self.matrix[self.indices[u]][self.indices[v]] is not None:
+                    l.append((u, v))
+
+        return l
+
+    @override
+    def __str__(self) -> str:
+
+        # make node string
+        n = ""
+        for node in self.nodes:
+            n += f"{str(node)}, "
+        n = n.rstrip(", ")  # remove trailing ", "
+
+        e = ""
+        e_count = 0
+        for u in self.indices.keys():
+            for v in self.indices.keys():
+                # index into the matrix, by getting the index of the nodes
+                if self.matrix[self.indices[u]][self.indices[v]] is not None:
+                    e_count += 1
+                    e += f"{str(u)} {str(v)} {self.weight(u, v)}\n"
+
+        s = \
+f"""
+Nodes: {n}
+{e_count} Edges:
+(u, v, weight)
+{e}
+"""
+
+        return s

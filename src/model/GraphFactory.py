@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-from code.model.graph import Graph
-
-class GraphFactory:
-    @staticmethod
-    def randomGraph(n, p) -> Graph:
-        pass
-
-    @staticmethod
-    def meshGraph(n):
-        pass
-
-    @staticmethod
-    def bipartiteGraph(n):
-        pass
-
-    @staticmethod
-    def rangeGraph(n, range):
-        pass
-=======
 """Creation of graphs.
 
 This file is associated with creation of graphs, and is dedicated
@@ -101,16 +81,34 @@ class GraphFactory:
 
         Args:
             n: number of nodes
+
+        Returns:
+            a mesh graph with n nodes
         """
-        pass
+        raise NotImplementedError
 
     @staticmethod
     def bipartite_graph(n: int) -> Graph:
-        pass
+        """Creates a bipartite graph
+
+        Args:
+            n: number of nodes
+        """
+        raise NotImplementedError
 
     @staticmethod
-    def range_graph(n, range) -> Graph:
-        pass
+    def range_graph(n: int, min: int, max: int) -> Graph:
+        """
+
+        Args:
+            n: the number of nodes
+            min: the minimum for range
+            max: the maximum for range
+
+        Returns:
+            a graph with n nodes
+        """
+        raise NotImplementedError
 
     @staticmethod
     def set_seed(seed: int) -> None:
@@ -120,4 +118,3 @@ class GraphFactory:
             seed: seed for random graphs
         """
         GraphFactory.r.seed(seed)
->>>>>>> origin/main
